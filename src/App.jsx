@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react"
 import axios from "axios"
+import ListadoCripto from "./listadoCripto"
+import "./ListadoCripto.css"
+import "./App.css"
 
 function App() {
   
@@ -7,10 +10,10 @@ function App() {
   const [criptos, setCriptos]=useState()
 
   useEffect(()=>{
-    fetch(`${API_URL}assets`)
-      .then((resp)=>resp.json())
+    axios.get(`${API_URL}assets`)
       .then((data)=>{
-        setCriptos(data.data)
+        console.log("Respuesta de la API:", data);
+        setCriptos(data.data.data)
       })
       .catch(()=>{
         console.error("La petición falló")
@@ -22,11 +25,11 @@ function App() {
   return (
     <>  
       <h1>Lista de Criptomonedas</h1>
-        <ol>
-          {criptos.map(({name, priceUsd})=>(
-            <li>Nombre:{name} Precio: {priceUsd}</li>
+        <div className="Contenedor-main">
+          {criptos.map(({id, name, priceUsd})=>(
+              <ListadoCripto id={id} name={name} priceUsd={priceUsd}/>
           ))}
-        </ol>
+        </div>
     </>
   )
 }
